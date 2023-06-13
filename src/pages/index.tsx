@@ -1,8 +1,12 @@
-import { SignInButton } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 
 const Home: NextPage = () => {
+  const { isLoaded, isSignedIn } = useUser();
+
+  if (!isLoaded) return <div>Loading...</div>;
   return (
     <>
       <Head>
@@ -11,7 +15,16 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <SignInButton afterSignInUrl="/dashboard" afterSignUpUrl="/dashboard" />
+        {!isSignedIn ? (
+          <SignInButton
+            afterSignInUrl="/dashboard"
+            afterSignUpUrl="/dashboard"
+          />
+        ) : (
+          <button className="rounded-md bg-[#2e026d] px-4 py-2 text-white">
+            <Link href="/dashboard">Go to dashboard</Link>
+          </button>
+        )}
       </main>
     </>
   );
