@@ -21,9 +21,7 @@ const Home: NextPage = () => {
             afterSignUpUrl="/dashboard"
           />
         ) : (
-          <button className="rounded-md bg-[#2e026d] px-4 py-2 text-white">
-            <Link href="/dashboard">Go to dashboard</Link>
-          </button>
+          <Link href="/dashboard">Go to dashboard</Link>
         )}
       </main>
     </>
