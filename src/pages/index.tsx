@@ -7,6 +7,7 @@ const Home: NextPage = () => {
   const { isLoaded, isSignedIn } = useUser();
 
   if (!isLoaded) return <div>Loading...</div>;
+
   return (
     <>
       <Head>
