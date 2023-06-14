@@ -21,7 +21,11 @@ export const TodoItem = (props: { todo: Todo }) => {
           disabled={isUpdating}
         />
         {todo.done && !isDeleted && (
-          <button className="bg-red-200" onClick={handleDelete}>
+          <button
+            className="bg-red-200"
+            onClick={handleDelete}
+            disabled={isDeleting || isDeleted}
+          >
             {isDeleting ? "Deleting..." : "Delete"}
           </button>
         )}
