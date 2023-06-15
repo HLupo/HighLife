@@ -5,7 +5,7 @@ export const useTask = (task: Task) => {
   const ctx = api.useContext();
 
   const { mutate: updateDone, isLoading: isUpdating } =
-    api.task.updateDone.useMutation({
+    api.task.updateFields.useMutation({
       onSuccess: () => {
         void ctx.task.getAll.invalidate();
       },

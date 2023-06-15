@@ -9,7 +9,7 @@ export const taskRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string().min(1).max(255),
-        description: z.string().min(1).max(255),
+        description: z.string().min(1).max(255).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -24,12 +24,22 @@ export const taskRouter = createTRPCRouter({
       });
       return task;
     }),
-  updateDone: privateProcedure
-    .input(z.object({ done: z.boolean(), id: z.string().cuid() }))
+  updateFields: privateProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+        endAt: z.date().optional(),
+        minutesRequired: z.number().min(0).optional(),
+        title: z.string().min(1).max(255).optional(),
+        description: z.string().min(1).max(255).optional(),
+        done: z.boolean().optional(),
+        priority: z.number().min(0).max(3).optional(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const task = await ctx.prisma.task.update({
         where: { id: input.id },
-        data: { done: input.done },
+        data: { ...input },
       });
       return task;
     }),
