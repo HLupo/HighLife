@@ -11,7 +11,15 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Todo {
+model UserTag {
+  id   String @id @default(cuid())
+  name String @unique
+  tasks Task[]
+
+  @@index([name])
+}
+
+model Task {
   id              String    @id @default(cuid())
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -22,6 +30,7 @@ model Todo {
   createdBy       String
   done            Boolean   @default(false)
   priority        Int       @default(0)
+  tags            UserTag[]
 
   @@index([createdBy])
 }

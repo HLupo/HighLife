@@ -1,23 +1,23 @@
-import type { Todo } from "@prisma/client";
+import type { Task } from "@prisma/client";
 import { api } from "~/utils/api";
 
-export const useTodo = (todo: Todo) => {
+export const useTask = (task: Task) => {
   const ctx = api.useContext();
 
   const { mutate: updateDone, isLoading: isUpdating } =
-    api.todo.updateDone.useMutation({
+    api.task.updateDone.useMutation({
       onSuccess: () => {
-        void ctx.todo.getAll.invalidate();
+        void ctx.task.getAll.invalidate();
       },
     });
 
   const {
-    mutate: deleteTodo,
+    mutate: deleteTask,
     isLoading: isDeleting,
     isSuccess: isDeleted,
-  } = api.todo.delete.useMutation({
+  } = api.task.delete.useMutation({
     onSuccess: () => {
-      void ctx.todo.getAll.invalidate();
+      void ctx.task.getAll.invalidate();
     },
     onError: (error) => {
       console.error(error);
@@ -25,11 +25,11 @@ export const useTodo = (todo: Todo) => {
   });
 
   const handleDone = () => {
-    updateDone({ id: todo.id, done: !todo.done });
+    updateDone({ id: task.id, done: !task.done });
   };
 
   const handleDelete = () => {
-    deleteTodo({ id: todo.id });
+    deleteTask({ id: task.id });
   };
 
   return {

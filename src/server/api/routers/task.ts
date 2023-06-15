@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
-export const todoRouter = createTRPCRouter({
+export const taskRouter = createTRPCRouter({
   getAll: privateProcedure.query(({ ctx }) => {
-    return ctx.prisma.todo.findMany({ where: { createdBy: ctx.userId } });
+    return ctx.prisma.task.findMany({ where: { createdBy: ctx.userId } });
   }),
   create: privateProcedure
     .input(
@@ -15,28 +15,28 @@ export const todoRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const creatorId = ctx.userId;
 
-      const todo = await ctx.prisma.todo.create({
+      const task = await ctx.prisma.task.create({
         data: {
           title: input.title,
           description: input.description,
           createdBy: creatorId,
         },
       });
-      return todo;
+      return task;
     }),
   updateDone: privateProcedure
     .input(z.object({ done: z.boolean(), id: z.string().cuid() }))
     .mutation(async ({ ctx, input }) => {
-      const todo = await ctx.prisma.todo.update({
+      const task = await ctx.prisma.task.update({
         where: { id: input.id },
         data: { done: input.done },
       });
-      return todo;
+      return task;
     }),
   delete: privateProcedure
     .input(z.object({ id: z.string().cuid() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.todo.delete({
+      await ctx.prisma.task.delete({
         where: { id: input.id },
       });
     }),

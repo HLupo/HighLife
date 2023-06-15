@@ -1,26 +1,26 @@
-import type { Todo } from "@prisma/client";
-import { useTodo } from "~/hooks/components/useTodo";
+import type { Task } from "@prisma/client";
+import { useTask } from "~/hooks/components/useTask";
 
-export const TodoItem = (props: { todo: Todo }) => {
-  const { todo } = props;
+export const TaskItem = (props: { task: Task }) => {
+  const { task } = props;
   const { isUpdating, handleDone, isDeleting, isDeleted, handleDelete } =
-    useTodo(todo);
+    useTask(task);
 
   const deletingStyle = isDeleting || isDeleted ? "opacity-50" : "";
 
   return (
     <div className={`mt-1 border border-slate-400 ${deletingStyle}`}>
-      <h2>{todo.title}</h2>
-      <p>{todo.description}</p>
+      <h2>{task.title}</h2>
+      <p>{task.description}</p>
       <div className="flex gap-1">
         <p>Done</p>
         <input
           type="checkbox"
-          checked={todo.done}
+          checked={task.done}
           onChange={handleDone}
           disabled={isUpdating}
         />
-        {todo.done && !isDeleted && (
+        {task.done && !isDeleted && (
           <button
             className="bg-red-200"
             onClick={handleDelete}
