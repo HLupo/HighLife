@@ -6,19 +6,45 @@ export const TaskCreator = () => {
 
   const titleInputRef = useRef<HTMLInputElement>(null);
   const descriptionInputRef = useRef<HTMLInputElement>(null);
+  const priorityInputRef = useRef<HTMLInputElement>(null);
+  const endDateInputRef = useRef<HTMLInputElement>(null);
+  const minutesRequiredInputRef = useRef<HTMLInputElement>(null);
 
   const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmitFormCreateTask = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const priority = priorityInputRef.current?.value
+      ? parseInt(priorityInputRef.current.value)
+      : undefined;
+
+    const endDate = endDateInputRef.current?.value
+      ? new Date(endDateInputRef.current.value)
+      : undefined;
+
+    const minutesRequired = minutesRequiredInputRef.current?.value
+      ? parseInt(minutesRequiredInputRef.current.value)
+      : undefined;
+
     const data = {
       title: titleInputRef.current?.value,
       description: descriptionInputRef.current?.value,
+      priority,
+      endDate,
+      minutesRequired,
     };
 
     if (!data.title) return;
-    createTask({ title: data.title, description: data.description });
+
+    createTask({
+      title: data.title,
+      description: data.description,
+      priority: data.priority,
+      endAt: data.endDate,
+      minutesRequired: data.minutesRequired,
+    });
+
     formRef.current?.reset();
   };
 
@@ -43,6 +69,31 @@ export const TaskCreator = () => {
           type="text"
           placeholder="Description"
           className="border border-slate-400"
+        />
+        <h2>Priority (Optionnal, 1-3)</h2>
+        <input
+          ref={priorityInputRef}
+          type="number"
+          placeholder="Priority"
+          className="border border-slate-400"
+          min={0}
+          max={3}
+        />
+        <h2>End date (optionnal)</h2>
+        <input
+          ref={endDateInputRef}
+          type="date"
+          placeholder="End date"
+          className="border border-slate-400"
+          min={new Date().toISOString().split("T")[0]}
+        />
+        <h2>Minutes required (optionnal)</h2>
+        <input
+          ref={minutesRequiredInputRef}
+          type="number"
+          placeholder="Minutes required"
+          className="border border-slate-400"
+          min={0}
         />
         <button
           className="focus:shadow-outline w-24 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"

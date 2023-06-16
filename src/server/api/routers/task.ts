@@ -8,8 +8,11 @@ export const taskRouter = createTRPCRouter({
   create: privateProcedure
     .input(
       z.object({
+        endAt: z.date().optional(),
+        minutesRequired: z.number().min(0).optional(),
         title: z.string().min(1).max(255),
         description: z.string().min(1).max(255).optional(),
+        priority: z.number().min(0).max(3).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -20,6 +23,9 @@ export const taskRouter = createTRPCRouter({
           title: input.title,
           description: input.description,
           createdBy: creatorId,
+          endAt: input.endAt,
+          minutesRequired: input.minutesRequired,
+          priority: input.priority,
         },
       });
       return task;
